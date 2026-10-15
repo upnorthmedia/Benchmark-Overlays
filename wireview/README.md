@@ -10,6 +10,8 @@ This makes the **Power Detector** in [TroyMetrics Benchmark Overlays v1.15](http
 
 You don't need to install the TroyMetrics overlays yourself. Setup downloads them if they're missing.
 
+**Already have TroyMetrics v1.15 installed?** Nothing extra to do. Setup finds your presets, skips the download, and adds WireView copies next to them. Any changes you made to those presets carry over to the copies. Your existing presets are never changed or reinstalled.
+
 ## Setup (about one minute)
 
 1. Download this repository: green **Code** button, then **Download ZIP**, then extract it.
@@ -51,7 +53,7 @@ The free HWiNFO64 turns off Shared Memory Support after 12 hours. Re-enable it, 
 
 - It creates 5 new files next to the originals in `RTSS\Plugins\Client\Overlays`, each ending in `(WireView Pro II).ovl`. **It never modifies the original presets.**
 - In each new file, it repoints 7 HWiNFO data sources (6 pin currents plus total power) to the WireView's readings, using the sensor instance it reads from HWiNFO on your PC. Everything else stays byte-for-byte the same.
-- If the TroyMetrics overlays are missing, it downloads the official v1.15 release from GitHub, verifies its SHA-256 checksum, and installs it the way the TroyMetrics instructions describe, including the Adderley Bold font.
+- If none of the Power Detector presets are installed, it downloads the official v1.15 release from GitHub, verifies its SHA-256 checksum, and installs it the way the TroyMetrics instructions describe, including the Adderley Bold font. If at least one preset is already installed, it never downloads or overwrites anything. Presets that aren't installed are skipped.
 
 | Overlay source (name unchanged) | Astral reading | WireView reading |
 |---|---|---|

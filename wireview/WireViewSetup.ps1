@@ -355,14 +355,18 @@ function Invoke-WireViewSetup {
     $overlays = Join-Path $rtss 'Plugins\Client\Overlays'
 
     Write-Step 'Checking the TroyMetrics overlays'
-    $missing = @($PowerDetectorPresets | Where-Object { -not (Test-Path (Join-Path $overlays $_)) })
-    if ($missing.Count -gt 0) {
+    $installed = @($PowerDetectorPresets | Where-Object { Test-Path (Join-Path $overlays $_) })
+    if ($installed.Count -eq 0) {
+        # Only install into an RTSS without TroyMetrics presets, so an existing (possibly customized) install is never overwritten.
         Write-Note 'Not installed yet. Downloading TroyMetrics Benchmark Overlays v1.15 from GitHub...'
         Install-TroyMetricsOverlays $rtss
-        $missing = @($PowerDetectorPresets | Where-Object { -not (Test-Path (Join-Path $overlays $_)) })
-        if ($missing.Count -gt 0) { throw "Install finished but these presets are still missing: $($missing -join ', ')" }
+        $installed = @($PowerDetectorPresets | Where-Object { Test-Path (Join-Path $overlays $_) })
+        if ($installed.Count -eq 0) { throw 'Install finished but no Power Detector presets were found.' }
     }
-    Write-Ok "Found all $($PowerDetectorPresets.Count) Power Detector presets"
+    Write-Ok "Found $($installed.Count) of $($PowerDetectorPresets.Count) Power Detector presets"
+    foreach ($preset in $PowerDetectorPresets | Where-Object { $installed -notcontains $_ }) {
+        Write-Note "Not installed, will skip: $preset"
+    }
 
     Write-Step 'Checking the Adderley Bold font'
     if (Test-FontInstalled 'Adderley*') {
@@ -386,14 +390,22 @@ function Invoke-WireViewSetup {
     }
 
     Write-Step 'Creating WireView versions of the presets'
-    foreach ($preset in $PowerDetectorPresets) {
+    $created = 0
+    foreach ($preset in $installed) {
         $source = Join-Path $overlays $preset
         $target = Join-Path $overlays ([IO.Path]::GetFileNameWithoutExtension($preset) + $OutputSuffix + '.ovl')
-        $text = $Latin1.GetString([IO.File]::ReadAllBytes($source))
-        $converted = Convert-OvlForWireView -Text $text -Binding $binding
+        try {
+            $text = $Latin1.GetString([IO.File]::ReadAllBytes($source))
+            $converted = Convert-OvlForWireView -Text $text -Binding $binding
+        } catch {
+            Write-Warn "Skipped $preset. $($_.Exception.Message)"
+            continue
+        }
         [IO.File]::WriteAllBytes($target, $Latin1.GetBytes($converted))
         Write-Ok (Split-Path $target -Leaf)
+        $created++
     }
+    if ($created -eq 0) { throw 'None of the installed presets could be converted. Reinstall TroyMetrics v1.15 and run setup again.' }
 
     Write-Host ''
     Write-Host 'All set. To turn it on:' -ForegroundColor Green
