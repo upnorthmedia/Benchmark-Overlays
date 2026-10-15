@@ -1,3 +1,6 @@
+> [!TIP]
+> **Have a Thermal Grizzly WireView Pro II?** This fork adds a one-click setup that points the Power Detector at it: see [`wireview/`](wireview/README.md).
+
 <h1 align="center">TroyMetrics Benchmark Overlays</h1>
 <p align="center">RTSS / RivaTuner Overlays by TroyMetrics 👻</p>
 
