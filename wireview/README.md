@@ -14,8 +14,8 @@ You don't need to install the TroyMetrics overlays yourself. Setup downloads the
 
 ## Setup (about one minute)
 
-1. Download this repository: green **Code** button, then **Download ZIP**, then extract it.
-2. Open the `wireview` folder and double-click **`Setup-WireView.bat`**.
+1. Download **[WireView-Pro-II-Setup.zip](https://github.com/upnorthmedia/Benchmark-Overlays/releases/latest/download/WireView-Pro-II-Setup.zip)** and extract it (right-click, then **Extract All**).
+2. Open the extracted folder and double-click **`Setup-WireView.bat`**.
    - If Windows says "Windows protected your PC", click **More info**, then **Run anyway**.
    - Click **Yes** when Windows asks for administrator permission.
 3. Follow what the window says. It checks everything in order and tells you exactly what to fix if something is missing:
